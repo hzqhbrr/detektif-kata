@@ -94,8 +94,8 @@ select {
 
 .tag {
   display: inline-block;
-  background: rgba(255, 255, 255, 0.18);
-  border: 1px solid rgba(255, 255, 255, 0.35);
+  background: rgba(255,255,255,0.18);
+  border: 1px solid rgba(255,255,255,0.35);
   border-radius: 999px;
   padding: 7px 12px;
   font-size: 0.78rem;
@@ -103,9 +103,29 @@ select {
   letter-spacing: 0.04em;
 }
 
+.sound-toggle {
+  border: 0;
+  background: rgba(255,255,255,0.18);
+  border-radius: 50%;
+  width: 42px;
+  height: 42px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  color: white;
+  border: 1px solid rgba(255,255,255,0.35);
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.sound-toggle:hover,
+.sound-toggle:focus-visible {
+  transform: translateY(-1px) scale(1.04);
+  background: rgba(255,255,255,0.24);
+  outline: none;
+}
+
 .detective-icon {
   font-size: 2.4rem;
-  filter: drop-shadow(0 4px 0 rgba(0, 0, 0, 0.15));
+  filter: drop-shadow(0 4px 0 rgba(0,0,0,0.15));
 }
 
 h1 {
@@ -135,8 +155,8 @@ h1 {
 
 .progress-box,
 .score-box {
-  background: rgba(255, 255, 255, 0.86);
-  border: 2px solid rgba(255, 255, 255, 0.85);
+  background: rgba(255,255,255,0.86);
+  border: 2px solid rgba(255,255,255,0.85);
   border-radius: 18px;
   padding: 12px 14px;
   box-shadow: 0 6px 18px rgba(30, 41, 59, 0.08);
@@ -160,7 +180,7 @@ h1 {
 
 .progress-fill {
   height: 100%;
-  width: 25%;
+  width: 13%;
   border-radius: inherit;
   background: linear-gradient(90deg, var(--orange), var(--yellow));
   transition: width 0.35s ease;
@@ -188,7 +208,7 @@ h1 {
 }
 
 .game-card {
-  background: rgba(255, 255, 255, 0.94);
+  background: rgba(255,255,255,0.94);
   border-radius: var(--radius);
   box-shadow: var(--shadow);
   padding: clamp(18px, 5vw, 34px);

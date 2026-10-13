@@ -6,16 +6,20 @@
     <title>Misi Detektif Kata</title>
     <meta
       name="description"
-      content="Permainan PdPR Tahun 2: kenal pasti dan betulkan perkataan yang salah dalam ayat."
+      content="Permainan interaktif Bahasa Melayu Tahun 2: pilih perkataan yang betul untuk membetulkan ayat."
     />
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
+    <div class="stars" id="stars" aria-hidden="true"></div>
+
     <main class="game-wrap">
       <header class="top-banner">
         <div class="brand-row">
           <span class="tag">BAHASA MELAYU • TAHUN 2</span>
-          <span class="detective-icon" aria-hidden="true">🔎</span>
+          <button class="sound-toggle" id="soundToggle" type="button" aria-label="Togol bunyi">
+            🔊
+          </button>
         </div>
 
         <h1>Misi Detektif Kata</h1>
@@ -25,8 +29,8 @@
       <section class="dashboard" aria-label="Maklumat permainan">
         <div class="progress-box">
           <div class="progress-label">
-            <span id="questionCounter">Soalan 1 daripada 4</span>
-            <span id="progressPercent">25%</span>
+            <span id="questionCounter">Soalan 1 daripada 8</span>
+            <span id="progressPercent">13%</span>
           </div>
           <div class="progress-track">
             <div class="progress-fill" id="progressFill"></div>
@@ -49,12 +53,10 @@
             untuk membetulkan ayat tersebut.
           </p>
           <p>
-            Ada <strong>4 soalan</strong> untuk diselesaikan. Jika salah, jangan risau —
-            cuba lagi!
+            Ada <strong>8 soalan</strong> dalam misi ini. Jika salah, cuba lagi sehingga
+            anda berjaya!
           </p>
-          <button class="start-btn show" id="startButton" type="button">
-            Mula Bermain 🚀
-          </button>
+          <button class="start-btn show" id="startButton" type="button">Mula Bermain 🚀</button>
         </div>
 
         <div id="questionScreen" class="hidden">
@@ -78,19 +80,15 @@
         <div id="resultScreen" class="result-screen hidden">
           <div class="big-detective" aria-hidden="true">🕵️‍♂️</div>
           <h2>Misi Selesai!</h2>
-          <div class="result-score" id="resultScore">0/4</div>
+          <div class="result-score" id="resultScore">0/8</div>
           <p class="result-message" id="resultMessage">Syabas, Detektif Kata!</p>
           <p id="resultDescription"></p>
-          <button class="restart-btn show" id="restartButton" type="button">
-            Main Semula 🔁
-          </button>
+          <button class="restart-btn show" id="restartButton" type="button">Main Semula 🔁</button>
         </div>
       </section>
 
-      <p class="footer-tip">Tip: Baca ayat perlahan-lahan sebelum memilih jawapan.</p>
+      <p class="footer-tip">Tip: Baca ayat berkali-kali sebelum memilih jawapan.</p>
     </main>
-
-    <div class="stars" id="stars" aria-hidden="true"></div>
 
     <script src="app.js"></script>
   </body>

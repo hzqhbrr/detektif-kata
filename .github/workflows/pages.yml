@@ -1,0 +1,315 @@
+const questions = [
+  {
+    number: 1,
+    icon: ["🕵️‍♀️", "🍛", "🌞"],
+    sentenceBefore: "Ali <span class='wrong-word'>meminum</span> nasi lemak pada waktu pagi.",
+    prompt: "Pilih perkataan yang betul untuk menggantikan perkataan “meminum”.",
+    options: [
+      { letter: "A", word: "membaca" },
+      { letter: "B", word: "makan", correct: true },
+      { letter: "C", word: "bermain" }
+    ],
+    corrected: "Ali makan nasi lemak pada waktu pagi."
+  },
+  {
+    number: 2,
+    icon: ["👩", "🧵", "🍳"],
+    sentenceBefore: "Ibu <span class='wrong-word'>menjahit</span> baju di dapur.",
+    prompt: "Pilih perkataan yang sesuai untuk menggantikan perkataan “menjahit”.",
+    options: [
+      { letter: "A", word: "memasak", correct: true },
+      { letter: "B", word: "menyanyi" },
+      { letter: "C", word: "berlari" }
+    ],
+    corrected: "Ibu memasak di dapur."
+  },
+  {
+    number: 3,
+    icon: ["👧", "⚽", "🌳"],
+    sentenceBefore: "Adik <span class='wrong-word'>membaca</span> bola di padang.",
+    prompt: "Pilih perkataan yang betul untuk menggantikan perkataan “membaca”.",
+    options: [
+      { letter: "A", word: "menulis" },
+      { letter: "B", word: "bermain", correct: true },
+      { letter: "C", word: "melukis" }
+    ],
+    corrected: "Adik bermain bola di padang."
+  },
+  {
+    number: 4,
+    icon: ["👧", "🥤", "✨"],
+    sentenceBefore: "Siti <span class='wrong-word'>menyapu</span> air menggunakan cawan.",
+    prompt: "Pilih perkataan yang paling sesuai untuk menggantikan perkataan “menyapu”.",
+    options: [
+      { letter: "A", word: "minum", correct: true },
+      { letter: "B", word: "membasuh" },
+      { letter: "C", word: "memasak" }
+    ],
+    corrected: "Siti minum air menggunakan cawan."
+  }
+];
+
+let questionOrder = [];
+let currentQuestion = 0;
+let score = 0;
+let questionAnswered = false;
+
+const gameState = {
+  started: false
+};
+
+const startScreen = document.getElementById("startScreen");
+const questionScreen = document.getElementById("questionScreen");
+const resultScreen = document.getElementById("resultScreen");
+
+const startButton = document.getElementById("startButton");
+const restartButton = document.getElementById("restartButton");
+const nextButton = document.getElementById("nextButton");
+
+const scene = document.getElementById("scene");
+const caseNumber = document.getElementById("caseNumber");
+const sentenceBox = document.getElementById("sentenceBox");
+const questionPrompt = document.getElementById("questionPrompt");
+const answerButtons = document.getElementById("answerButtons");
+const feedback = document.getElementById("feedback");
+
+const questionCounter = document.getElementById("questionCounter");
+const progressPercent = document.getElementById("progressPercent");
+const progressFill = document.getElementById("progressFill");
+const scoreNumber = document.getElementById("scoreNumber");
+
+const resultScore = document.getElementById("resultScore");
+const resultMessage = document.getElementById("resultMessage");
+const resultDescription = document.getElementById("resultDescription");
+
+function shuffleArray(items) {
+  const clone = [...items];
+  for (let i = clone.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [clone[i], clone[j]] = [clone[j], clone[i]];
+  }
+  return clone;
+}
+
+function showScreen(screenToShow) {
+  [startScreen, questionScreen, resultScreen].forEach((screen) => {
+    screen.classList.add("hidden");
+  });
+  screenToShow.classList.remove("hidden");
+}
+
+function updateDashboard() {
+  const questionNumber = currentQuestion + 1;
+  const percent = Math.round((questionNumber / questionOrder.length) * 100);
+
+  questionCounter.textContent = `Soalan ${questionNumber} daripada ${questionOrder.length}`;
+  progressPercent.textContent = `${percent}%`;
+  progressFill.style.width = `${percent}%`;
+  scoreNumber.textContent = score;
+}
+
+function loadQuestion() {
+  const question = questionOrder[currentQuestion];
+
+  questionAnswered = false;
+  updateDashboard();
+
+  caseNumber.textContent = question.number;
+  questionPrompt.textContent = question.prompt;
+  sentenceBox.innerHTML = question.sentenceBefore;
+
+  scene.innerHTML = question.icon
+    .map((item) => `<div class="cartoon">${item}</div>`)
+    .join("");
+
+  answerButtons.innerHTML = "";
+  feedback.className = "feedback";
+  feedback.innerHTML = "";
+  nextButton.classList.remove("show");
+
+  question.options.forEach((option) => {
+    const button = document.createElement("button");
+    button.className = "answer-btn";
+    button.type = "button";
+    button.setAttribute("aria-label", `Jawapan ${option.letter}: ${option.word}`);
+    button.innerHTML = `<strong>${option.letter}.</strong> ${option.word}`;
+    button.addEventListener("click", () => checkAnswer(button, option));
+    answerButtons.appendChild(button);
+  });
+
+  setTimeout(() => {
+    const firstButton = answerButtons.querySelector(".answer-btn");
+    if (firstButton) firstButton.focus();
+  }, 50);
+}
+
+function checkAnswer(button, option) {
+  if (questionAnswered) return;
+
+  if (option.correct) {
+    questionAnswered = true;
+    score += 1;
+    scoreNumber.textContent = score;
+
+    button.classList.add("correct");
+
+    document.querySelectorAll(".answer-btn").forEach((answerButton) => {
+      answerButton.disabled = true;
+    });
+
+    feedback.className = "feedback success show";
+    feedback.innerHTML = `🌟 Tahniah! Anda berjaya membetulkan ayat! <span class="correct-sentence">Ayat yang betul: ${questionOrder[currentQuestion].corrected}</span>`;
+
+    createStars();
+
+    nextButton.textContent =
+      currentQuestion === questionOrder.length - 1
+        ? "Lihat Keputusan 🏆"
+        : "Soalan Seterusnya ➜";
+
+    nextButton.classList.add("show");
+    nextButton.focus();
+  } else {
+    button.classList.add("incorrect");
+
+    feedback.className = "feedback try-again show";
+    feedback.innerHTML = "💪 Belum tepat. Cuba lagi! Cari perkataan yang paling sesuai dalam ayat.";
+
+    setTimeout(() => {
+      button.classList.remove("incorrect");
+    }, 500);
+  }
+}
+
+function createStars() {
+  const starContainer = document.getElementById("stars");
+  const starSymbols = ["⭐", "✨", "🌟", "💫", "⭐", "✨"];
+
+  starSymbols.forEach((symbol, index) => {
+    const star = document.createElement("span");
+    star.className = "star";
+    star.textContent = symbol;
+    star.style.left = `${30 + Math.random() * 40}%`;
+    star.style.top = `${35 + Math.random() * 20}%`;
+    star.style.setProperty("--x", `${(Math.random() - 0.5) * 360}px`);
+    star.style.setProperty("--y", `${-80 - Math.random() * 260}px`);
+    star.style.animationDelay = `${index * 0.06}s`;
+    starContainer.appendChild(star);
+
+    setTimeout(() => star.remove(), 1500);
+  });
+}
+
+function updateBestScore() {
+  const bestKey = "detektifKataBestScore";
+  const best = Number(localStorage.getItem(bestKey) || 0);
+
+  if (score > best) {
+    localStorage.setItem(bestKey, String(score));
+  }
+
+  return Number(localStorage.getItem(bestKey) || 0);
+}
+
+function showResults() {
+  showScreen(resultScreen);
+
+  const bestScore = updateBestScore();
+  resultScore.textContent = `${score}/${questionOrder.length}`;
+
+  if (score === questionOrder.length) {
+    resultMessage.textContent = "Syabas, Detektif Kata! 🏆";
+    resultDescription.textContent = "Hebat! Semua ayat berjaya dibetulkan. Anda memang detektif kata yang handal!";
+  } else if (score >= 2) {
+    resultMessage.textContent = "Bagus, teruskan usaha! 🌟";
+    resultDescription.textContent = `Anda berjaya menjawab ${score} daripada ${questionOrder.length} soalan. Rekod terbaik anda ialah ${bestScore}. Cuba lagi untuk skor penuh!`;
+  } else {
+    resultMessage.textContent = "Jangan berputus asa! 💪";
+    resultDescription.textContent = `Anda mendapat ${score} daripada ${questionOrder.length}. Semak semula perkataan dalam ayat dan cuba lagi. Rekod terbaik anda ialah ${bestScore}.`;
+  }
+
+  resultScreen.querySelector(".restart-btn").focus();
+}
+
+function startGame() {
+  currentQuestion = 0;
+  score = 0;
+  questionOrder = shuffleArray(questions);
+  questionOrder = questionOrder.map((q, index) => ({ ...q, number: index + 1 }));
+  showScreen(questionScreen);
+  loadQuestion();
+}
+
+function nextQuestion() {
+  if (currentQuestion < questionOrder.length - 1) {
+    currentQuestion += 1;
+    loadQuestion();
+  } else {
+    showResults();
+  }
+}
+
+startButton.addEventListener("click", () => {
+  startGame();
+});
+
+nextButton.addEventListener("click", () => {
+  nextQuestion();
+});
+
+restartButton.addEventListener("click", () => {
+  startGame();
+});
+
+document.addEventListener("keydown", (event) => {
+  if (startScreen.classList.contains("hidden") === false) {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      startGame();
+    }
+    return;
+  }
+
+  if (questionScreen.classList.contains("hidden") === false) {
+    const keyMap = { a: 0, b: 1, c: 2, A: 0, B: 1, C: 2 };
+    const index = keyMap[event.key];
+
+    if (index !== undefined) {
+      const answerButton = answerButtons.children[index];
+      if (answerButton && !answerButton.disabled) {
+        answerButton.click();
+      }
+    }
+
+    if (event.key === "Enter" && nextButton.classList.contains("show")) {
+      event.preventDefault();
+      nextQuestion();
+    }
+  }
+});
+
+showScreen(startScreen);
+scoreNumber.textContent = 0;
+questionCounter.textContent = `Soalan 1 daripada ${questions.length}`;
+progressPercent.textContent = "25%";
+progressFill.style.width = "25%";
+
+const bestKey = "detektifKataBestScore";
+const bestScoreSaved = Number(localStorage.getItem(bestKey) || 0);
+if (bestScoreSaved > 0) {
+  scoreNumber.textContent = bestScoreSaved;
+}
+
+startButton.focus();
+
+if (!localStorage.getItem(bestKey)) {
+  localStorage.setItem(bestKey, "0");
+}
+
+window.addEventListener("load", () => {
+  const bestScoreSavedNow = Number(localStorage.getItem(bestKey) || 0);
+  if (bestScoreSavedNow > 0) {
+    scoreNumber.textContent = bestScoreSavedNow;
+  }
+});
+

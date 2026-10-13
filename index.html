@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ms">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Misi Detektif Kata</title>
+    <meta
+      name="description"
+      content="Permainan PdPR Tahun 2: kenal pasti dan betulkan perkataan yang salah dalam ayat."
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="game-wrap">
+      <header class="top-banner">
+        <div class="brand-row">
+          <span class="tag">BAHASA MELAYU • TAHUN 2</span>
+          <span class="detective-icon" aria-hidden="true">🔎</span>
+        </div>
+
+        <h1>Misi Detektif Kata</h1>
+        <p class="subtitle">Cari perkataan yang tidak sesuai dan betulkan ayat!</p>
+      </header>
+
+      <section class="dashboard" aria-label="Maklumat permainan">
+        <div class="progress-box">
+          <div class="progress-label">
+            <span id="questionCounter">Soalan 1 daripada 4</span>
+            <span id="progressPercent">25%</span>
+          </div>
+          <div class="progress-track">
+            <div class="progress-fill" id="progressFill"></div>
+          </div>
+        </div>
+
+        <div class="score-box">
+          <span class="score-number" id="scoreNumber">0</span>
+          <span class="score-text">jawapan betul</span>
+        </div>
+      </section>
+
+      <section class="game-card">
+        <div id="startScreen" class="start-screen">
+          <div class="big-detective" aria-hidden="true">🕵️‍♀️</div>
+          <span class="mission-badge">MISI DIMULAKAN!</span>
+          <h2>Jadilah Detektif Kata</h2>
+          <p>
+            Baca setiap ayat dengan teliti. Kemudian pilih perkataan yang paling sesuai
+            untuk membetulkan ayat tersebut.
+          </p>
+          <p>
+            Ada <strong>4 soalan</strong> untuk diselesaikan. Jika salah, jangan risau —
+            cuba lagi!
+          </p>
+          <button class="start-btn show" id="startButton" type="button">
+            Mula Bermain 🚀
+          </button>
+        </div>
+
+        <div id="questionScreen" class="hidden">
+          <div class="scene" id="scene" aria-hidden="true"></div>
+
+          <div class="question-kicker">Kes Detektif <span id="caseNumber">1</span></div>
+
+          <h2 class="question-title" id="questionPrompt">Pilih perkataan yang betul.</h2>
+
+          <div class="sentence-box" id="sentenceBox"></div>
+
+          <p class="instruction">Pilih jawapan yang paling sesuai:</p>
+
+          <div class="answers" id="answerButtons"></div>
+
+          <div id="feedback" class="feedback" role="status" aria-live="polite"></div>
+
+          <button class="next-btn" id="nextButton" type="button">Soalan Seterusnya ➜</button>
+        </div>
+
+        <div id="resultScreen" class="result-screen hidden">
+          <div class="big-detective" aria-hidden="true">🕵️‍♂️</div>
+          <h2>Misi Selesai!</h2>
+          <div class="result-score" id="resultScore">0/4</div>
+          <p class="result-message" id="resultMessage">Syabas, Detektif Kata!</p>
+          <p id="resultDescription"></p>
+          <button class="restart-btn show" id="restartButton" type="button">
+            Main Semula 🔁
+          </button>
+        </div>
+      </section>
+
+      <p class="footer-tip">Tip: Baca ayat perlahan-lahan sebelum memilih jawapan.</p>
+    </main>
+
+    <div class="stars" id="stars" aria-hidden="true"></div>
+
+    <script src="app.js"></script>
+  </body>
+</html>
